@@ -719,6 +719,13 @@ public abstract class GenInputsAbstract extends CommandHandler {
   public static int string_maxlen = 1000;
 
   /**
+   * The "GRT Impurity" technique from the GRT paper attempts to fuzz the inputs of methods used in
+   * tests. When GRT Fuzzing is enabled, Randoop will attempt to fuzz primitive/String values,
+   * potentially trigger more branches, improving coverage for the program under test. (Randoop by
+   * default starts with a small fixed set of primitive/String inputs to use as arguments to
+   * methods.)
+   *
+   * <p>Non-primitive input fuzzing will be added in the future.
    * The "Elephant Brain" feature from the GRT paper manages method sequences (to create inputs) in
    * {@link randoop.sequence.SequenceCollection} using the exact types obtained at runtime. When
    * generating test cases, "Elephant Brain" compares the static type of each method return value
@@ -748,6 +755,18 @@ public abstract class GenInputsAbstract extends CommandHandler {
   @Unpublicized
   @Option("Log information about the classes used in demand-driven input creation")
   public static @Nullable String demand_driven_logging = null;
+  @Option("Fuzz the inputs of methods used in tests")
+  public static boolean grt_fuzzing = false;
+
+  /**
+   * The standard deviation parameter for the Gaussian distribution used to fuzz the primitive
+   * number inputs used in tests. The default value is 30.0.
+   *
+   * <p>Only used when {@code --grt-fuzzing} is set to true.
+   */
+  @Unpublicized
+  @Option("Standard deviation for the Gaussian distribution used by GRT Impurity to fuzz  numbers")
+  public static double grt_fuzzing_stddev = 30.0;
 
   ///////////////////////////////////////////////////////////////////
   /**
