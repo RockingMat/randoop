@@ -99,7 +99,8 @@ public final class MethodCall extends CallableOperation {
     if (isStatic()) {
       // In the generated Java code, the "receiver" (before the method name) for a static method
       // call is the class name.
-      sb.append(declaringType.getCanonicalName().replace('$', '.'));
+      if (declaringType.getCanonicalName() != null)
+        sb.append(declaringType.getCanonicalName().replace('$', '.'));
     } else {
       // In the generated Java code, the receiver is an expression.
       String receiverVar = isStatic() ? null : inputVars.get(0).getName();
