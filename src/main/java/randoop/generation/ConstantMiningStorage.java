@@ -6,6 +6,7 @@ import java.util.Map;
 import java.util.Set;
 import randoop.main.GenInputsAbstract;
 import randoop.sequence.Sequence;
+import randoop.util.Log;
 
 /**
  * This class is a generic storage for the constant mining information. T is the scope of the
@@ -139,16 +140,19 @@ public class ConstantMiningStorage<T> {
   }
 
   /**
-   * Get all sequences that recorded under the specific scope, which are the constants extracted by
-   * constant mining.
+   * Get all sequences that had been recorded under the specific scope, which are the constants
+   * extracted by constant mining.
    *
    * @param t the specific package, class, or null
    * @return the set of sequences that recorded under the specific scope
    */
   public Set<Sequence> getSequencesForScope(T t) {
-    Map<Sequence, Integer> map = frequencyInfo.get(t);
-    if (map != null) return frequencyInfo.get(t).keySet();
-    else return new HashSet<>();
+    if (!frequencyInfo.containsKey(t)) {
+      Log.logPrintf("The scope %s is not found in the frequency information");
+      return new HashSet<>();
+    }
+
+    return frequencyInfo.get(t).keySet();
   }
 
   /**
