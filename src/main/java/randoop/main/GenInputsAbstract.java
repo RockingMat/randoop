@@ -724,8 +724,8 @@ public abstract class GenInputsAbstract extends CommandHandler {
    * for debugging the DemandDrivenInputCreation technique.
    */
   @Unpublicized
-  @Option("Log information about the classes used in demand-driven input creation")
-  public static @Nullable String demand_driven_logging = null;
+  @Option("<filename> Log information about the classes used in demand-driven input creation")
+  public static @Nullable FileWriterWithName demand_driven_logging = null;
 
   ///////////////////////////////////////////////////////////////////
   /**

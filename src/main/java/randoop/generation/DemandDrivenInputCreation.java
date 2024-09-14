@@ -1,9 +1,6 @@
 package randoop.generation;
 
-import static java.nio.charset.StandardCharsets.UTF_8;
-
-import java.io.FileWriter;
-import java.io.PrintWriter;
+import java.io.IOException;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Executable;
 import java.lang.reflect.Method;
@@ -22,6 +19,7 @@ import java.util.regex.Pattern;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.checkerframework.checker.signature.qual.ClassGetName;
 import org.plumelib.util.CollectionsPlume;
+import org.plumelib.util.FileWriterWithName;
 import randoop.DummyVisitor;
 import randoop.ExecutionOutcome;
 import randoop.NormalExecution;
@@ -512,14 +510,16 @@ public class DemandDrivenInputCreation {
    */
   public static void writeUnspecifiedClassesToLog() {
     // Write to GenInputsAbstract.demand_driven_logging
-    try (PrintWriter writer =
-        new PrintWriter(new FileWriter(GenInputsAbstract.demand_driven_logging, UTF_8))) {
-      writer.println("Unspecified classes used in demand-driven input creation:");
-      for (Class<?> cls : unspecifiedClasses) {
-        writer.println(cls.getName());
+    if (GenInputsAbstract.demand_driven_logging != null) {
+      FileWriterWithName writer = GenInputsAbstract.demand_driven_logging;
+      try {
+        writer.write("Unspecified classes used in demand-driven input creation:");
+        for (Class<?> cls : unspecifiedClasses) {
+          writer.write(cls.getName());
+        }
+      } catch (IOException e) {
+        throw new RuntimeException(e);
       }
-    } catch (Exception e) {
-      throw new RandoopBug("Error writing to demand-driven logging file: " + e);
     }
   }
 }
